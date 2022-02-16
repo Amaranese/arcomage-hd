@@ -1,0 +1,38 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  gh-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Build App
+        run: |
+          if [ -e yarn.lock ]; then
+          yarn install --ignore-optional --frozen-lockfile
+          yarn build
+          elif [ -e package-lock.json ]; then
+          npm ci --no-optional
+          npm run build
+          else
+          npm i --no-optional
+          npm run build
+          fi
+
+      - name: Deploy to GitHub Pages (in another repo)
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'dist'
+          destination-github-username: 'arcomage'
+          destination-repository-name: 'arcomage.github.io'
+          user-email: tomchen.org@gmail.com
+          target-branch: gh-pages

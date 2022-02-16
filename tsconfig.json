@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es6",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "compileOnSave": false
+}
